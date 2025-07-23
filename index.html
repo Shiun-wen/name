@@ -1,0 +1,357 @@
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+
+const IndigenousNameHistoryGame = () => {
+  const [currentEra, setCurrentEra] = useState(0);
+  const [playerName, setPlayerName] = useState('巴冷・達魯瑪克');
+  const [showEmotion, setShowEmotion] = useState(false);
+  const [currentEmotion, setCurrentEmotion] = useState('');
+  const [nameHistory, setNameHistory] = useState([]);
+
+  const historicalEras = [
+    {
+      period: '1600年 - 傳統時期',
+      background: '你是排灣族巴冷家族的長子，名叫「巴冷・達魯瑪克」',
+      context: '在部落裡，你的名字就是你的身分證明。「巴冷」是你的個人名，代表「勇敢」；「達魯瑪克」是你家族的名字，代表「山頂的守護者」。',
+      freedom: '你可以自由地使用族語，參與祭典，按照祖先的方式生活。每個人都知道你是誰，你屬於哪個家族。',
+      question: '有人問你：「你是誰？」',
+      options: [
+        {
+          text: '我是巴冷・達魯瑪克，山頂守護者家族的勇士',
+          emotion: '😊',
+          response: '你自豪地宣告自己的身分，族人們都點頭認同。你的名字就是你的一切。'
+        },
+        {
+          text: '我是部落的孩子，這片土地是我的家',
+          emotion: '🥰',
+          response: '你感受到與土地和族人深深的連結，這種歸屬感讓你內心充滿溫暖。'
+        }
+      ]
+    },
+    {
+      period: '1700年 - 清朝統治',
+      background: '清朝官員來到部落，宣布新政策',
+      context: '官員說：「所有番民必須歸化，接受朝廷賜姓，才能獲得良民身分，受到保護。」',
+      pressure: '如果不接受漢姓，你們將被視為「化外之民」，無法經商，孩子不能讀書，還可能面臨軍事鎮壓。',
+      dilemma: '官員指著你說：「你從今以後姓『李』，叫李達魯。」這是你人生第一次被迫改名。',
+      question: '面對這個要求，你的內心是？',
+      options: [
+        {
+          text: '為了族人安全，我接受這個漢姓',
+          emotion: '😔',
+          response: '你咬牙接受，心想：「只要能保護族人...」但失去家族名讓你內心淌血。',
+          newName: '李達魯'
+        },
+        {
+          text: '我絕不放棄祖先給我的名字！',
+          emotion: '😠',
+          response: '你憤怒抗拒，但看到官兵的刀劍，最終還是屈服了...你恨自己的無力。',
+          newName: '李達魯'
+        }
+      ]
+    },
+    {
+      period: '1895年 - 日治初期',
+      background: '日本人來了，帶來新的統治方式',
+      context: '日本政府初期允許你保持「李達魯」這個名字，但要求你學習日語，接受「文明開化」。',
+      observation: '你看到有些族人開始說日語，穿和服，你的兒子也被送去日本學校。',
+      worry: '你擔心族人漸漸忘記傳統，但又無力阻止這個大時代的變化。',
+      question: '看著文化逐漸流失，你的感受是？',
+      options: [
+        {
+          text: '我要在家偷偷教孩子族語和傳統',
+          emotion: '😰',
+          response: '你偷偷進行文化傳承，但總是提心吊膽，怕被發現會有危險。'
+        },
+        {
+          text: '也許跟上時代比較好...',
+          emotion: '😞',
+          response: '你開始懷疑傳統的價值，內心充滿矛盾和失落。'
+        }
+      ]
+    },
+    {
+      period: '1940年 - 皇民化運動',
+      background: '戰爭爆發，日本推行激進的皇民化政策',
+      context: '政府宣布：「所有人必須改用日本姓名，成為真正的日本國民！不改名者視為不忠，後果自負！」',
+      terror: '你看到拒絕改名的鄰居被抓走，孩子被學校退學，商店拒絕賣東西給他們。',
+      despair: '這是你第二次被迫改名。你的「李達魯」也要消失了。',
+      question: '面對這個威脅，你只能？',
+      options: [
+        {
+          text: '為了家人安全，改名「田中太郎」',
+          emotion: '😢',
+          response: '你含淚改名，心中默念：「祖先啊，原諒我，我不得不這樣做...」',
+          newName: '田中太郎'
+        },
+        {
+          text: '寧死不屈，拒絕改名！',
+          emotion: '😤',
+          response: '你想反抗，但看到家人恐懼的眼神，最終還是妥協了...你覺得自己是懦夫。',
+          newName: '田中太郎'
+        }
+      ]
+    },
+    {
+      period: '1945年 - 戰後',
+      background: '日本戰敗，國民政府接管台灣',
+      context: '新政府宣布：「去除日本殖民遺毒！所有人改用中文姓名，重建中華文化！」',
+      hope: '你心想：「終於可以恢復原來的名字了嗎？」',
+      reality: '但戶政人員說：「你可以改成李志明、李志華這樣的中文名字。」他們不知道你原本的族名。',
+      question: '面對第三次改名，你的心情是？',
+      options: [
+        {
+          text: '至少能恢復「李」姓，比日本名好',
+          emotion: '😕',
+          response: '你勉強接受「李志明」，雖然不是原名，但至少擺脫了日本名字。',
+          newName: '李志明'
+        },
+        {
+          text: '我想恢復「巴冷・達魯瑪克」！',
+          emotion: '😓',
+          response: '你提出要求，但被告知「不合規定」。你只能無奈地成為「李志明」。',
+          newName: '李志明'
+        }
+      ]
+    },
+    {
+      period: '2001年 - 現代困境',
+      background: '《原住民身分法》施行，你的孫子想申請原住民身分',
+      context: '承辦人員說：「孩子必須從具原住民身分的祖父的姓氏，才能取得原住民身分。」',
+      irony: '你現在的姓氏是「李」——這是300年前清朝政府強迫你祖先接受的漢姓！',
+      absurdity: '法律竟然要求用「被殖民者強加的姓氏」來證明「原住民認同」。',
+      question: '知道這個要求後，你的感想是？',
+      options: [
+        {
+          text: '這太荒謬了！用被迫的姓氏證明認同？',
+          emotion: '😡',
+          response: '你憤怒地想：「我們被迫改名三次，現在竟然要用這些傷痕來證明身分？！」'
+        },
+        {
+          text: '歷史太沉重了...我已經累了',
+          emotion: '😮‍💨',
+          response: '你深深嘆息：「一輩子被迫改名，現在連孫子都要承受這個荒謬...」'
+        }
+      ]
+    }
+  ];
+
+  const handleChoice = (option) => {
+    setCurrentEmotion({
+      icon: option.emotion,
+      response: option.response
+    });
+    setShowEmotion(true);
+
+    // 記錄姓名變化
+    if (option.newName) {
+      setNameHistory([...nameHistory, {
+        era: historicalEras[currentEra].period,
+        oldName: playerName,
+        newName: option.newName,
+        reason: '被迫改名'
+      }]);
+      setPlayerName(option.newName);
+    }
+
+    // 3秒後進入下個時代
+    setTimeout(() => {
+      setShowEmotion(false);
+      setTimeout(() => {
+        if (currentEra < historicalEras.length - 1) {
+          setCurrentEra(currentEra + 1);
+        } else {
+          setCurrentEra('end');
+        }
+      }, 500);
+    }, 3000);
+  };
+
+  const reset = () => {
+    setCurrentEra(0);
+    setPlayerName('巴冷・達魯瑪克');
+    setShowEmotion(false);
+    setCurrentEmotion('');
+    setNameHistory([]);
+  };
+
+  if (currentEra === 'end') {
+    return (
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-red-800 mb-4">歷史的沉重足跡</h1>
+          <p className="text-lg text-gray-600">你已經體驗了400年來原住民被迫改名的痛苦歷程</p>
+        </div>
+
+        <Card className="border-3 border-red-400 mb-8">
+          <CardHeader>
+            <CardTitle className="text-center text-2xl text-red-800">姓名變遷血淚史</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="p-4 bg-green-100 rounded-lg border-l-4 border-green-500">
+                <h4 className="font-bold text-green-800">1600年：巴冷・達魯瑪克</h4>
+                <p className="text-sm text-gray-700">原始的排灣族名，充滿家族榮耀和文化意義</p>
+              </div>
+              
+              {nameHistory.map((change, index) => (
+                <div key={index} className="p-4 bg-red-100 rounded-lg border-l-4 border-red-500">
+                  <h4 className="font-bold text-red-800">{change.era}：{change.newName}</h4>
+                  <p className="text-sm text-gray-700">{change.reason} - 失去更多文化連結</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-3 border-orange-400 mb-8">
+          <CardHeader>
+            <CardTitle className="text-center text-xl text-orange-800">歷史的深刻教訓</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4 text-gray-700">
+              <div className="bg-orange-50 p-4 rounded-lg">
+                <h4 className="font-bold text-orange-800 mb-2">🔴 三次被迫改名</h4>
+                <p className="text-sm">清朝賜姓 → 日治皇民化 → 戰後中文化</p>
+              </div>
+              
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <h4 className="font-bold text-yellow-800 mb-2">💔 文化斷裂</h4>
+                <p className="text-sm">每次改名都意味著文化認同的進一步喪失</p>
+              </div>
+              
+              <div className="bg-red-50 p-4 rounded-lg">
+                <h4 className="font-bold text-red-800 mb-2">😤 現代諷刺</h4>
+                <p className="text-sm">現在竟然要用「被迫取得的漢姓」來「證明原住民認同」</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-3 border-blue-400 mb-8">
+          <CardHeader>
+            <CardTitle className="text-center text-xl text-blue-800">憲法法庭的正義</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center space-y-4">
+              <p className="text-lg font-semibold text-blue-600">2022年：宣告違憲！</p>
+              <p className="text-gray-700">
+                憲法法庭終於看見了這個歷史諷刺，宣告姓名條款違憲。
+                約9.5萬人受益，法律須在2年內修正。
+              </p>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <p className="text-sm text-green-800">
+                  <strong>重要意義：</strong>承認了原住民在歷史上承受的姓名壓迫，
+                  不應該成為現代身分認定的障礙。
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center">
+          <button
+            onClick={reset}
+            className="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors text-lg"
+          >
+            重新體驗這段歷史
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const era = historicalEras[currentEra];
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-purple-800 mb-4">原住民姓氏壓迫史</h1>
+        <p className="text-lg text-gray-600">體驗400年來被迫改名的歷史創傷</p>
+        <p className="text-sm text-gray-500">時代 {currentEra + 1} / {historicalEras.length}</p>
+      </div>
+
+      <div className="mb-6">
+        <div className="w-full bg-gray-200 rounded-full h-3">
+          <div 
+            className="bg-purple-600 h-3 rounded-full transition-all duration-500"
+            style={{ width: `${((currentEra + 1) / historicalEras.length) * 100}%` }}
+          ></div>
+        </div>
+      </div>
+
+      <Card className="border-3 border-purple-300 mb-6">
+        <CardHeader>
+          <CardTitle className="text-2xl text-purple-800">{era.period}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <h3 className="text-xl font-bold text-blue-800 mb-2">你目前的名字</h3>
+              <p className="text-2xl font-bold text-purple-600">{playerName}</p>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-bold text-gray-800 mb-2">📖 時代背景</h4>
+              <p className="text-gray-700 mb-2">{era.background}</p>
+              <p className="text-gray-600 text-sm">{era.context}</p>
+            </div>
+
+            {era.pressure && (
+              <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
+                <h4 className="font-bold text-red-800 mb-2">⚠️ 外來壓力</h4>
+                <p className="text-red-700 text-sm">{era.pressure}</p>
+              </div>
+            )}
+
+            {era.dilemma && (
+              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
+                <h4 className="font-bold text-orange-800 mb-2">😰 面臨困境</h4>
+                <p className="text-orange-700 text-sm">{era.dilemma}</p>
+              </div>
+            )}
+
+            {era.freedom && (
+              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
+                <h4 className="font-bold text-green-800 mb-2">🌿 自由時光</h4>
+                <p className="text-green-700 text-sm">{era.freedom}</p>
+              </div>
+            )}
+
+            {era.irony && (
+              <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                <h4 className="font-bold text-yellow-800 mb-2">😤 歷史諷刺</h4>
+                <p className="text-yellow-700 text-sm">{era.irony}</p>
+                <p className="text-yellow-700 text-sm mt-1">{era.absurdity}</p>
+              </div>
+            )}
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-bold text-blue-800 mb-3">{era.question}</h4>
+              <div className="space-y-3">
+                {era.options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleChoice(option)}
+                    className="w-full text-left p-3 border-2 border-blue-200 rounded-lg hover:border-blue-400 hover:bg-blue-100 transition-colors"
+                  >
+                    {option.text}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {showEmotion && (
+              <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-center">
+                <div className="text-4xl mb-2">{currentEmotion.icon}</div>
+                <p className="text-gray-700 italic">"{currentEmotion.response}"</p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default IndigenousNameHistoryGame;
