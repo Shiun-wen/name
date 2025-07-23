@@ -1,357 +1,754 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-
-const IndigenousNameHistoryGame = () => {
-  const [currentEra, setCurrentEra] = useState(0);
-  const [playerName, setPlayerName] = useState('巴冷・達魯瑪克');
-  const [showEmotion, setShowEmotion] = useState(false);
-  const [currentEmotion, setCurrentEmotion] = useState('');
-  const [nameHistory, setNameHistory] = useState([]);
-
-  const historicalEras = [
-    {
-      period: '1600年 - 傳統時期',
-      background: '你是排灣族巴冷家族的長子，名叫「巴冷・達魯瑪克」',
-      context: '在部落裡，你的名字就是你的身分證明。「巴冷」是你的個人名，代表「勇敢」；「達魯瑪克」是你家族的名字，代表「山頂的守護者」。',
-      freedom: '你可以自由地使用族語，參與祭典，按照祖先的方式生活。每個人都知道你是誰，你屬於哪個家族。',
-      question: '有人問你：「你是誰？」',
-      options: [
-        {
-          text: '我是巴冷・達魯瑪克，山頂守護者家族的勇士',
-          emotion: '😊',
-          response: '你自豪地宣告自己的身分，族人們都點頭認同。你的名字就是你的一切。'
-        },
-        {
-          text: '我是部落的孩子，這片土地是我的家',
-          emotion: '🥰',
-          response: '你感受到與土地和族人深深的連結，這種歸屬感讓你內心充滿溫暖。'
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原住民姓氏壓迫歷史體驗遊戲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      ]
-    },
-    {
-      period: '1700年 - 清朝統治',
-      background: '清朝官員來到部落，宣布新政策',
-      context: '官員說：「所有番民必須歸化，接受朝廷賜姓，才能獲得良民身分，受到保護。」',
-      pressure: '如果不接受漢姓，你們將被視為「化外之民」，無法經商，孩子不能讀書，還可能面臨軍事鎮壓。',
-      dilemma: '官員指著你說：「你從今以後姓『李』，叫李達魯。」這是你人生第一次被迫改名。',
-      question: '面對這個要求，你的內心是？',
-      options: [
-        {
-          text: '為了族人安全，我接受這個漢姓',
-          emotion: '😔',
-          response: '你咬牙接受，心想：「只要能保護族人...」但失去家族名讓你內心淌血。',
-          newName: '李達魯'
-        },
-        {
-          text: '我絕不放棄祖先給我的名字！',
-          emotion: '😠',
-          response: '你憤怒抗拒，但看到官兵的刀劍，最終還是屈服了...你恨自己的無力。',
-          newName: '李達魯'
-        }
-      ]
-    },
-    {
-      period: '1895年 - 日治初期',
-      background: '日本人來了，帶來新的統治方式',
-      context: '日本政府初期允許你保持「李達魯」這個名字，但要求你學習日語，接受「文明開化」。',
-      observation: '你看到有些族人開始說日語，穿和服，你的兒子也被送去日本學校。',
-      worry: '你擔心族人漸漸忘記傳統，但又無力阻止這個大時代的變化。',
-      question: '看著文化逐漸流失，你的感受是？',
-      options: [
-        {
-          text: '我要在家偷偷教孩子族語和傳統',
-          emotion: '😰',
-          response: '你偷偷進行文化傳承，但總是提心吊膽，怕被發現會有危險。'
-        },
-        {
-          text: '也許跟上時代比較好...',
-          emotion: '😞',
-          response: '你開始懷疑傳統的價值，內心充滿矛盾和失落。'
-        }
-      ]
-    },
-    {
-      period: '1940年 - 皇民化運動',
-      background: '戰爭爆發，日本推行激進的皇民化政策',
-      context: '政府宣布：「所有人必須改用日本姓名，成為真正的日本國民！不改名者視為不忠，後果自負！」',
-      terror: '你看到拒絕改名的鄰居被抓走，孩子被學校退學，商店拒絕賣東西給他們。',
-      despair: '這是你第二次被迫改名。你的「李達魯」也要消失了。',
-      question: '面對這個威脅，你只能？',
-      options: [
-        {
-          text: '為了家人安全，改名「田中太郎」',
-          emotion: '😢',
-          response: '你含淚改名，心中默念：「祖先啊，原諒我，我不得不這樣做...」',
-          newName: '田中太郎'
-        },
-        {
-          text: '寧死不屈，拒絕改名！',
-          emotion: '😤',
-          response: '你想反抗，但看到家人恐懼的眼神，最終還是妥協了...你覺得自己是懦夫。',
-          newName: '田中太郎'
-        }
-      ]
-    },
-    {
-      period: '1945年 - 戰後',
-      background: '日本戰敗，國民政府接管台灣',
-      context: '新政府宣布：「去除日本殖民遺毒！所有人改用中文姓名，重建中華文化！」',
-      hope: '你心想：「終於可以恢復原來的名字了嗎？」',
-      reality: '但戶政人員說：「你可以改成李志明、李志華這樣的中文名字。」他們不知道你原本的族名。',
-      question: '面對第三次改名，你的心情是？',
-      options: [
-        {
-          text: '至少能恢復「李」姓，比日本名好',
-          emotion: '😕',
-          response: '你勉強接受「李志明」，雖然不是原名，但至少擺脫了日本名字。',
-          newName: '李志明'
-        },
-        {
-          text: '我想恢復「巴冷・達魯瑪克」！',
-          emotion: '😓',
-          response: '你提出要求，但被告知「不合規定」。你只能無奈地成為「李志明」。',
-          newName: '李志明'
-        }
-      ]
-    },
-    {
-      period: '2001年 - 現代困境',
-      background: '《原住民身分法》施行，你的孫子想申請原住民身分',
-      context: '承辦人員說：「孩子必須從具原住民身分的祖父的姓氏，才能取得原住民身分。」',
-      irony: '你現在的姓氏是「李」——這是300年前清朝政府強迫你祖先接受的漢姓！',
-      absurdity: '法律竟然要求用「被殖民者強加的姓氏」來證明「原住民認同」。',
-      question: '知道這個要求後，你的感想是？',
-      options: [
-        {
-          text: '這太荒謬了！用被迫的姓氏證明認同？',
-          emotion: '😡',
-          response: '你憤怒地想：「我們被迫改名三次，現在竟然要用這些傷痕來證明身分？！」'
-        },
-        {
-          text: '歷史太沉重了...我已經累了',
-          emotion: '😮‍💨',
-          response: '你深深嘆息：「一輩子被迫改名，現在連孫子都要承受這個荒謬...」'
-        }
-      ]
-    }
-  ];
 
-  const handleChoice = (option) => {
-    setCurrentEmotion({
-      icon: option.emotion,
-      response: option.response
-    });
-    setShowEmotion(true);
-
-    // 記錄姓名變化
-    if (option.newName) {
-      setNameHistory([...nameHistory, {
-        era: historicalEras[currentEra].period,
-        oldName: playerName,
-        newName: option.newName,
-        reason: '被迫改名'
-      }]);
-      setPlayerName(option.newName);
-    }
-
-    // 3秒後進入下個時代
-    setTimeout(() => {
-      setShowEmotion(false);
-      setTimeout(() => {
-        if (currentEra < historicalEras.length - 1) {
-          setCurrentEra(currentEra + 1);
-        } else {
-          setCurrentEra('end');
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-      }, 500);
-    }, 3000);
-  };
 
-  const reset = () => {
-    setCurrentEra(0);
-    setPlayerName('巴冷・達魯瑪克');
-    setShowEmotion(false);
-    setCurrentEmotion('');
-    setNameHistory([]);
-  };
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
 
-  if (currentEra === 'end') {
-    return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-red-800 mb-4">歷史的沉重足跡</h1>
-          <p className="text-lg text-gray-600">你已經體驗了400年來原住民被迫改名的痛苦歷程</p>
+        .header {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .progress-container {
+            padding: 20px 30px;
+            background: #f8fafc;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #a855f7);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .name-display {
+            text-align: center;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .name-display h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .name-display .current-name {
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .era-card {
+            background: white;
+            border: 3px solid #8b5cf6;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .era-header {
+            background: #8b5cf6;
+            color: white;
+            padding: 20px;
+        }
+
+        .era-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .era-content {
+            padding: 25px;
+        }
+
+        .info-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid;
+        }
+
+        .info-background {
+            background: #f1f5f9;
+            border-left-color: #64748b;
+        }
+
+        .info-pressure {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+
+        .info-freedom {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+
+        .info-irony {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+        }
+
+        .info-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-section {
+            background: #dbeafe;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .question-title {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            background: #dbeafe;
+            border-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .emotion-feedback {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .emotion-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .emotion-text {
+            color: #92400e;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .end-screen {
+            text-align: center;
+        }
+
+        .end-title {
+            color: #dc2626;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .history-timeline {
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid;
+        }
+
+        .timeline-original {
+            background: #dcfce7;
+            border-left-color: #22c55e;
+        }
+
+        .timeline-forced {
+            background: #fecaca;
+            border-left-color: #ef4444;
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .lesson-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .lesson-card {
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+
+        .lesson-trauma {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+
+        .lesson-culture {
+            background: #fefce8;
+            border-left-color: #eab308;
+        }
+
+        .lesson-justice {
+            background: #fef2f2;
+            border-left-color: #dc2626;
+        }
+
+        .final-verdict {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .verdict-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .verdict-content {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .lesson-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>原住民姓氏壓迫史</h1>
+            <p>體驗400年來被迫改名的歷史創傷</p>
         </div>
 
-        <Card className="border-3 border-red-400 mb-8">
-          <CardHeader>
-            <CardTitle className="text-center text-2xl text-red-800">姓名變遷血淚史</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="p-4 bg-green-100 rounded-lg border-l-4 border-green-500">
-                <h4 className="font-bold text-green-800">1600年：巴冷・達魯瑪克</h4>
-                <p className="text-sm text-gray-700">原始的排灣族名，充滿家族榮耀和文化意義</p>
-              </div>
-              
-              {nameHistory.map((change, index) => (
-                <div key={index} className="p-4 bg-red-100 rounded-lg border-l-4 border-red-500">
-                  <h4 className="font-bold text-red-800">{change.era}：{change.newName}</h4>
-                  <p className="text-sm text-gray-700">{change.reason} - 失去更多文化連結</p>
-                </div>
-              ))}
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-3 border-orange-400 mb-8">
-          <CardHeader>
-            <CardTitle className="text-center text-xl text-orange-800">歷史的深刻教訓</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4 text-gray-700">
-              <div className="bg-orange-50 p-4 rounded-lg">
-                <h4 className="font-bold text-orange-800 mb-2">🔴 三次被迫改名</h4>
-                <p className="text-sm">清朝賜姓 → 日治皇民化 → 戰後中文化</p>
-              </div>
-              
-              <div className="bg-yellow-50 p-4 rounded-lg">
-                <h4 className="font-bold text-yellow-800 mb-2">💔 文化斷裂</h4>
-                <p className="text-sm">每次改名都意味著文化認同的進一步喪失</p>
-              </div>
-              
-              <div className="bg-red-50 p-4 rounded-lg">
-                <h4 className="font-bold text-red-800 mb-2">😤 現代諷刺</h4>
-                <p className="text-sm">現在竟然要用「被迫取得的漢姓」來「證明原住民認同」</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-3 border-blue-400 mb-8">
-          <CardHeader>
-            <CardTitle className="text-center text-xl text-blue-800">憲法法庭的正義</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center space-y-4">
-              <p className="text-lg font-semibold text-blue-600">2022年：宣告違憲！</p>
-              <p className="text-gray-700">
-                憲法法庭終於看見了這個歷史諷刺，宣告姓名條款違憲。
-                約9.5萬人受益，法律須在2年內修正。
-              </p>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <p className="text-sm text-green-800">
-                  <strong>重要意義：</strong>承認了原住民在歷史上承受的姓名壓迫，
-                  不應該成為現代身分認定的障礙。
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="text-center">
-          <button
-            onClick={reset}
-            className="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors text-lg"
-          >
-            重新體驗這段歷史
-          </button>
+            <div class="progress-text" id="progressText">時代 1 / 6</div>
         </div>
-      </div>
-    );
-  }
 
-  const era = historicalEras[currentEra];
-
-  return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-purple-800 mb-4">原住民姓氏壓迫史</h1>
-        <p className="text-lg text-gray-600">體驗400年來被迫改名的歷史創傷</p>
-        <p className="text-sm text-gray-500">時代 {currentEra + 1} / {historicalEras.length}</p>
-      </div>
-
-      <div className="mb-6">
-        <div className="w-full bg-gray-200 rounded-full h-3">
-          <div 
-            className="bg-purple-600 h-3 rounded-full transition-all duration-500"
-            style={{ width: `${((currentEra + 1) / historicalEras.length) * 100}%` }}
-          ></div>
+        <div class="content" id="gameContent">
+            <!-- 遊戲內容將在這裡動態生成 -->
         </div>
-      </div>
-
-      <Card className="border-3 border-purple-300 mb-6">
-        <CardHeader>
-          <CardTitle className="text-2xl text-purple-800">{era.period}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <h3 className="text-xl font-bold text-blue-800 mb-2">你目前的名字</h3>
-              <p className="text-2xl font-bold text-purple-600">{playerName}</p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-bold text-gray-800 mb-2">📖 時代背景</h4>
-              <p className="text-gray-700 mb-2">{era.background}</p>
-              <p className="text-gray-600 text-sm">{era.context}</p>
-            </div>
-
-            {era.pressure && (
-              <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
-                <h4 className="font-bold text-red-800 mb-2">⚠️ 外來壓力</h4>
-                <p className="text-red-700 text-sm">{era.pressure}</p>
-              </div>
-            )}
-
-            {era.dilemma && (
-              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
-                <h4 className="font-bold text-orange-800 mb-2">😰 面臨困境</h4>
-                <p className="text-orange-700 text-sm">{era.dilemma}</p>
-              </div>
-            )}
-
-            {era.freedom && (
-              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                <h4 className="font-bold text-green-800 mb-2">🌿 自由時光</h4>
-                <p className="text-green-700 text-sm">{era.freedom}</p>
-              </div>
-            )}
-
-            {era.irony && (
-              <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
-                <h4 className="font-bold text-yellow-800 mb-2">😤 歷史諷刺</h4>
-                <p className="text-yellow-700 text-sm">{era.irony}</p>
-                <p className="text-yellow-700 text-sm mt-1">{era.absurdity}</p>
-              </div>
-            )}
-
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-bold text-blue-800 mb-3">{era.question}</h4>
-              <div className="space-y-3">
-                {era.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleChoice(option)}
-                    className="w-full text-left p-3 border-2 border-blue-200 rounded-lg hover:border-blue-400 hover:bg-blue-100 transition-colors"
-                  >
-                    {option.text}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {showEmotion && (
-              <div className="mt-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-center">
-                <div className="text-4xl mb-2">{currentEmotion.icon}</div>
-                <p className="text-gray-700 italic">"{currentEmotion.response}"</p>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
     </div>
-  );
-};
 
-export default IndigenousNameHistoryGame;
+    <script>
+        // 遊戲狀態
+        let currentEra = 0;
+        let playerName = '巴冷・達魯瑪克';
+        let showEmotion = false;
+        let nameHistory = [];
+
+        // 歷史時代資料
+        const historicalEras = [
+            {
+                period: '1600年 - 傳統時期',
+                background: '你是排灣族巴冷家族的長子，名叫「巴冷・達魯瑪克」',
+                context: '在部落裡，你的名字就是你的身分證明。「巴冷」是你的個人名，代表「勇敢」；「達魯瑪克」是你家族的名字，代表「山頂的守護者」。',
+                freedom: '你可以自由地使用族語，參與祭典，按照祖先的方式生活。每個人都知道你是誰，你屬於哪個家族。',
+                question: '有人問你：「你是誰？」',
+                type: 'freedom',
+                options: [
+                    {
+                        text: '我是巴冷・達魯瑪克，山頂守護者家族的勇士',
+                        emotion: '😊',
+                        response: '你自豪地宣告自己的身分，族人們都點頭認同。你的名字就是你的一切。'
+                    },
+                    {
+                        text: '我是部落的孩子，這片土地是我的家',
+                        emotion: '🥰',
+                        response: '你感受到與土地和族人深深的連結，這種歸屬感讓你內心充滿溫暖。'
+                    }
+                ]
+            },
+            {
+                period: '1700年 - 清朝統治',
+                background: '清朝官員來到部落，宣布新政策',
+                context: '官員說：「所有番民必須歸化，接受朝廷賜姓，才能獲得良民身分，受到保護。」',
+                pressure: '如果不接受漢姓，你們將被視為「化外之民」，無法經商，孩子不能讀書，還可能面臨軍事鎮壓。',
+                dilemma: '官員指著你說：「你從今以後姓『李』，叫李達魯。」這是你人生第一次被迫改名。',
+                question: '面對這個要求，你的內心是？',
+                type: 'pressure',
+                options: [
+                    {
+                        text: '為了族人安全，我接受這個漢姓',
+                        emotion: '😔',
+                        response: '你咬牙接受，心想：「只要能保護族人...」但失去家族名讓你內心淌血。',
+                        newName: '李達魯'
+                    },
+                    {
+                        text: '我絕不放棄祖先給我的名字！',
+                        emotion: '😠',
+                        response: '你憤怒抗拒，但看到官兵的刀劍，最終還是屈服了...你恨自己的無力。',
+                        newName: '李達魯'
+                    }
+                ]
+            },
+            {
+                period: '1895年 - 日治初期',
+                background: '日本人來了，帶來新的統治方式',
+                context: '日本政府初期允許你保持「李達魯」這個名字，但要求你學習日語，接受「文明開化」。',
+                observation: '你看到有些族人開始說日語，穿和服，你的兒子也被送去日本學校。',
+                worry: '你擔心族人漸漸忘記傳統，但又無力阻止這個大時代的變化。',
+                question: '看著文化逐漸流失，你的感受是？',
+                type: 'background',
+                options: [
+                    {
+                        text: '我要在家偷偷教孩子族語和傳統',
+                        emotion: '😰',
+                        response: '你偷偷進行文化傳承，但總是提心吊膽，怕被發現會有危險。'
+                    },
+                    {
+                        text: '也許跟上時代比較好...',
+                        emotion: '😞',
+                        response: '你開始懷疑傳統的價值，內心充滿矛盾和失落。'
+                    }
+                ]
+            },
+            {
+                period: '1940年 - 皇民化運動',
+                background: '戰爭爆發，日本推行激進的皇民化政策',
+                context: '政府宣布：「所有人必須改用日本姓名，成為真正的日本國民！不改名者視為不忠，後果自負！」',
+                terror: '你看到拒絕改名的鄰居被抓走，孩子被學校退學，商店拒絕賣東西給他們。',
+                despair: '這是你第二次被迫改名。你的「李達魯」也要消失了。',
+                question: '面對這個威脅，你只能？',
+                type: 'pressure',
+                options: [
+                    {
+                        text: '為了家人安全，改名「田中太郎」',
+                        emotion: '😢',
+                        response: '你含淚改名，心中默念：「祖先啊，原諒我，我不得不這樣做...」',
+                        newName: '田中太郎'
+                    },
+                    {
+                        text: '寧死不屈，拒絕改名！',
+                        emotion: '😤',
+                        response: '你想反抗，但看到家人恐懼的眼神，最終還是妥協了...你覺得自己是懦夫。',
+                        newName: '田中太郎'
+                    }
+                ]
+            },
+            {
+                period: '1945年 - 戰後',
+                background: '日本戰敗，國民政府接管台灣',
+                context: '新政府宣布：「去除日本殖民遺毒！所有人改用中文姓名，重建中華文化！」',
+                hope: '你心想：「終於可以恢復原來的名字了嗎？」',
+                reality: '但戶政人員說：「你可以改成李志明、李志華這樣的中文名字。」他們不知道你原本的族名。',
+                question: '面對第三次改名，你的心情是？',
+                type: 'background',
+                options: [
+                    {
+                        text: '至少能恢復「李」姓，比日本名好',
+                        emotion: '😕',
+                        response: '你勉強接受「李志明」，雖然不是原名，但至少擺脫了日本名字。',
+                        newName: '李志明'
+                    },
+                    {
+                        text: '我想恢復「巴冷・達魯瑪克」！',
+                        emotion: '😓',
+                        response: '你提出要求，但被告知「不合規定」。你只能無奈地成為「李志明」。',
+                        newName: '李志明'
+                    }
+                ]
+            },
+            {
+                period: '2001年 - 現代困境',
+                background: '《原住民身分法》施行，你的孫子想申請原住民身分',
+                context: '承辦人員說：「孩子必須從具原住民身分的祖父的姓氏，才能取得原住民身分。」',
+                irony: '你現在的姓氏是「李」——這是300年前清朝政府強迫你祖先接受的漢姓！',
+                absurdity: '法律竟然要求用「被殖民者強加的姓氏」來證明「原住民認同」。',
+                question: '知道這個要求後，你的感想是？',
+                type: 'irony',
+                options: [
+                    {
+                        text: '這太荒謬了！用被迫的姓氏證明認同？',
+                        emotion: '😡',
+                        response: '你憤怒地想：「我們被迫改名三次，現在竟然要用這些傷痕來證明身分？！」'
+                    },
+                    {
+                        text: '歷史太沉重了...我已經累了',
+                        emotion: '😮‍💨',
+                        response: '你深深嘆息：「一輩子被迫改名，現在連孫子都要承受這個荒謬...」'
+                    }
+                ]
+            }
+        ];
+
+        // 更新進度條
+        function updateProgress() {
+            const progress = ((currentEra + 1) / historicalEras.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `時代 ${currentEra + 1} / ${historicalEras.length}`;
+        }
+
+        // 處理選擇
+        function handleChoice(optionIndex) {
+            const era = historicalEras[currentEra];
+            const option = era.options[optionIndex];
+            
+            // 顯示情感反應
+            showEmotionFeedback(option.emotion, option.response);
+            
+            // 記錄姓名變化
+            if (option.newName) {
+                nameHistory.push({
+                    era: era.period,
+                    oldName: playerName,
+                    newName: option.newName,
+                    reason: '被迫改名'
+                });
+                playerName = option.newName;
+            }
+            
+            // 3秒後進入下個時代
+            setTimeout(() => {
+                if (currentEra < historicalEras.length - 1) {
+                    currentEra++;
+                    renderEra();
+                } else {
+                    renderEndScreen();
+                }
+            }, 3000);
+        }
+
+        // 顯示情感反應
+        function showEmotionFeedback(emotion, response) {
+            const gameContent = document.getElementById('gameContent');
+            const emotionDiv = document.createElement('div');
+            emotionDiv.className = 'emotion-feedback';
+            emotionDiv.innerHTML = `
+                <div class="emotion-icon">${emotion}</div>
+                <div class="emotion-text">"${response}"</div>
+            `;
+            gameContent.appendChild(emotionDiv);
+        }
+
+        // 渲染時代內容
+        function renderEra() {
+            const era = historicalEras[currentEra];
+            updateProgress();
+            
+            let infoSections = '';
+            
+            // 背景資訊
+            infoSections += `
+                <div class="info-box info-background">
+                    <div class="info-title">📖 時代背景</div>
+                    <div>${era.background}</div>
+                    <div style="margin-top: 8px; color: #64748b; font-size: 0.9rem;">${era.context}</div>
+                </div>
+            `;
+            
+            // 根據類型添加不同資訊
+            if (era.pressure) {
+                infoSections += `
+                    <div class="info-box info-pressure">
+                        <div class="info-title">⚠️ 外來壓力</div>
+                        <div style="color: #dc2626; font-size: 0.9rem;">${era.pressure}</div>
+                    </div>
+                `;
+            }
+            
+            if (era.dilemma) {
+                infoSections += `
+                    <div class="info-box info-pressure">
+                        <div class="info-title">😰 面臨困境</div>
+                        <div style="color: #ea580c; font-size: 0.9rem;">${era.dilemma}</div>
+                    </div>
+                `;
+            }
+            
+            if (era.freedom) {
+                infoSections += `
+                    <div class="info-box info-freedom">
+                        <div class="info-title">🌿 自由時光</div>
+                        <div style="color: #15803d; font-size: 0.9rem;">${era.freedom}</div>
+                    </div>
+                `;
+            }
+            
+            if (era.irony) {
+                infoSections += `
+                    <div class="info-box info-irony">
+                        <div class="info-title">😤 歷史諷刺</div>
+                        <div style="color: #d97706; font-size: 0.9rem;">${era.irony}</div>
+                        <div style="color: #d97706; font-size: 0.9rem; margin-top: 4px;">${era.absurdity}</div>
+                    </div>
+                `;
+            }
+            
+            // 其他資訊
+            ['observation', 'worry', 'terror', 'despair', 'hope', 'reality'].forEach(key => {
+                if (era[key]) {
+                    infoSections += `
+                        <div class="info-box info-background">
+                            <div style="color: #64748b; font-size: 0.9rem;">${era[key]}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            // 選項按鈕
+            const optionsHtml = era.options.map((option, index) => 
+                `<button class="option-btn" onclick="handleChoice(${index})">${option.text}</button>`
+            ).join('');
+            
+            const content = `
+                <div class="name-display">
+                    <h3>你目前的名字</h3>
+                    <div class="current-name">${playerName}</div>
+                </div>
+                
+                <div class="era-card">
+                    <div class="era-header">
+                        <div class="era-title">${era.period}</div>
+                    </div>
+                    <div class="era-content">
+                        ${infoSections}
+                        
+                        <div class="question-section">
+                            <div class="question-title">${era.question}</div>
+                            <div class="options">
+                                ${optionsHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('gameContent').innerHTML = content;
+        }
+
+        // 渲染結束畫面
+        function renderEndScreen() {
+            document.getElementById('progressText').textContent = '歷史體驗完成';
+            
+            // 姓名變遷歷史
+            const timelineHtml = [
+                {
+                    title: '1600年：巴冷・達魯瑪克',
+                    desc: '原始的排灣族名，充滿家族榮耀和文化意義',
+                    class: 'timeline-original'
+                },
+                ...nameHistory.map(change => ({
+                    title: `${change.era}：${change.newName}`,
+                    desc: `${change.reason} - 失去更多文化連結`,
+                    class: 'timeline-forced'
+                }))
+            ].map(item => `
+                <div class="timeline-item ${item.class}">
+                    <div class="timeline-title">${item.title}</div>
+                    <div class="timeline-desc">${item.desc}</div>
+                </div>
+            `).join('');
+            
+            const content = `
+                <div class="end-screen">
+                    <h1 class="end-title">歷史的沉重足跡</h1>
+                    <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 30px;">
+                        你已經體驗了400年來原住民被迫改名的痛苦歷程
+                    </p>
+                    
+                    <div style="background: white; border: 3px solid #ef4444; border-radius: 12px; overflow: hidden; margin-bottom: 30px;">
+                        <div style="background: #ef4444; color: white; padding: 20px; text-align: center;">
+                            <h2 style="font-size: 1.5rem;">姓名變遷血淚史</h2>
+                        </div>
+                        <div style="padding: 25px;">
+                            <div class="history-timeline">
+                                ${timelineHtml}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lesson-cards">
+                        <div class="lesson-card lesson-trauma">
+                            <div class="info-title" style="color: #dc2626;">🔴 三次被迫改名</div>
+                            <div style="font-size: 0.9rem;">清朝賜姓 → 日治皇民化 → 戰後中文化</div>
+                        </div>
+                        
+                        <div class="lesson-card lesson-culture">
+                            <div class="info-title" style="color: #d97706;">💔 文化斷裂</div>
+                            <div style="font-size: 0.9rem;">每次改名都意味著文化認同的進一步喪失</div>
+                        </div>
+                        
+                        <div class="lesson-card lesson-justice">
+                            <div class="info-title" style="color: #dc2626;">😤 現代諷刺</div>
+                            <div style="font-size: 0.9rem;">現在竟然要用「被迫取得的漢姓」來「證明原住民認同」</div>
+                        </div>
+                    </div>
+                    
+                    <div class="final-verdict">
+                        <div class="verdict-title">憲法法庭的正義</div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 1.1rem; font-weight: bold; margin-bottom: 15px;">2022年：宣告違憲！</p>
+                            <p style="margin-bottom: 15px;">
+                                憲法法庭終於看見了這個歷史諷刺，宣告姓名條款違憲。
+                                約9.5萬人受益，法律須在2年內修正。
+                            </p>
+                        </div>
+                        <div class="verdict-content">
+                            <div style="font-size: 0.9rem;">
+                                <strong>重要意義：</strong>承認了原住民在歷史上承受的姓名壓迫，
+                                不應該成為現代身分認定的障礙。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="reset-btn" onclick="resetGame()">重新體驗這段歷史</button>
+                </div>
+            `;
+            
+            document.getElementById('gameContent').innerHTML = content;
+        }
+
+        // 重置遊戲
+        function resetGame() {
+            currentEra = 0;
+            playerName = '巴冷・達魯瑪克';
+            nameHistory = [];
+            renderEra();
+        }
+
+        // 初始化遊戲
+        renderEra();
+    </script>
+</body>
+</html>
