@@ -373,7 +373,7 @@
     <script>
         // 遊戲狀態
         let currentEra = 0;
-        let playerName = '巴冷・達魯瑪克';
+        let playerName = '屋巴克・達魯瑪克';
         let showEmotion = false;
         let nameHistory = [];
 
@@ -381,14 +381,14 @@
         const historicalEras = [
             {
                 period: '1600年 - 傳統時期',
-                background: '你是排灣族巴冷家族的長子，名叫「巴冷・達魯瑪克」',
-                context: '在部落裡，你的名字就是你的身分證明。「巴冷」是你的個人名，代表「勇敢」；「達魯瑪克」是你家族的名字，代表「山頂的守護者」。',
+                background: '你是排灣族達魯瑪克家族的長子，名叫「屋巴克・達魯瑪克」',
+                context: '在部落裡，你的名字就是你的身分證明。「屋巴克」是你的個人名，代表「勇敢的獵人」；「達魯瑪克」是你家族的名字，代表「山頂的守護者」。',
                 freedom: '你可以自由地使用族語，參與祭典，按照祖先的方式生活。每個人都知道你是誰，你屬於哪個家族。',
                 question: '有人問你：「你是誰？」',
                 type: 'freedom',
                 options: [
                     {
-                        text: '我是巴冷・達魯瑪克，山頂守護者家族的勇士',
+                        text: '我是屋巴克・達魯瑪克，山頂守護者家族的勇敢獵人',
                         emotion: '😊',
                         response: '你自豪地宣告自己的身分，族人們都點頭認同。你的名字就是你的一切。'
                     },
@@ -482,7 +482,7 @@
                         newName: '李志明'
                     },
                     {
-                        text: '我想恢復「巴冷・達魯瑪克」！',
+                        text: '我想恢復「屋巴克・達魯瑪克」！',
                         emotion: '😓',
                         response: '你提出要求，但被告知「不合規定」。你只能無奈地成為「李志明」。',
                         newName: '李志明'
@@ -664,7 +664,7 @@
             // 姓名變遷歷史
             const timelineHtml = [
                 {
-                    title: '1600年：巴冷・達魯瑪克',
+                    title: '1600年：屋巴克・達魯瑪克',
                     desc: '原始的排灣族名，充滿家族榮耀和文化意義',
                     class: 'timeline-original'
                 },
@@ -742,7 +742,7 @@
         // 重置遊戲
         function resetGame() {
             currentEra = 0;
-            playerName = '巴冷・達魯瑪克';
+            playerName = '屋巴克・達魯瑪克';
             nameHistory = [];
             renderEra();
         }
